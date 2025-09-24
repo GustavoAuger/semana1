@@ -85,20 +85,6 @@ java -jar target/semana1-0.0.1-SNAPSHOT.jar
 Configurar variables de entorno o `application.yaml` para tu base local.
 
 ## Notas
-- Relación entre entidades realizada de forma explícita a través del atributo en común `Especificacion.ofertaId` hacia `Oferta.id` (sin anotaciones de relación JPA), como requiere el enunciado.
-- Hibernate `ddl-auto=update` para facilitar la ejecución; en producción se recomienda migraciones con Flyway/Liquibase.
+
  - El servicio MySQL en Docker Compose usa un volumen `db_data` para persistir los datos en el host, evitando pérdidas al pausar o recrear contenedores.
 
-## Publicación en GitHub
-1. Inicializa git y realiza el primer commit.
-2. Crea un repositorio en GitHub y agrega el remote.
-3. Empuja la rama principal.
-
-```bash
-git init
-git add .
-git commit -m "Semana 1: Spring Boot 3 + MySQL + Docker"
-git branch -M main
-git remote add origin https://github.com/<tu-usuario>/semana1.git
-git push -u origin main
-```
