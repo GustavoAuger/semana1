@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,32 +21,36 @@ public class EspecificacionController {
     private final ModelMapper modelMapper;
 
     @GetMapping
-    public List<EspecificacionDTO> findAll(@RequestParam(required = false) Integer ofertaId) {
+    public ResponseEntity<List<EspecificacionDTO>> findAll(@RequestParam(required = false) Integer ofertaId) {
         List<Especificacion> entidades = (ofertaId != null)
                 ? especificacionService.listarPorOfertaId(ofertaId)
                 : especificacionService.listarTodas();
-        return entidades.stream()
-                .map(e -> modelMapper.map(e, EspecificacionDTO.class))
+        
+        List<EspecificacionDTO> dtos = entidades.stream()
+                .map(especificacion -> modelMapper.map(especificacion, EspecificacionDTO.class))
                 .collect(Collectors.toList());
+        
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/{id}")
-    public EspecificacionDTO obtener(@PathVariable Integer id) {
+    public ResponseEntity<EspecificacionDTO> obtener(@PathVariable Integer id) {
         Especificacion entidad = especificacionService.obtenerPorId(id);
-        return modelMapper.map(entidad, EspecificacionDTO.class);
+        EspecificacionDTO dto = modelMapper.map(entidad, EspecificacionDTO.class);
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public EspecificacionDTO crear(@Valid @RequestBody EspecificacionDTO dto) {
+    public ResponseEntity<EspecificacionDTO> crear(@Valid @RequestBody EspecificacionDTO dto) {
         Especificacion entidad = modelMapper.map(dto, Especificacion.class);
         Especificacion guardado = especificacionService.crear(entidad);
-        return modelMapper.map(guardado, EspecificacionDTO.class);
+        EspecificacionDTO respuesta = modelMapper.map(guardado, EspecificacionDTO.class);
+        return new ResponseEntity<>(respuesta, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void eliminar(@PathVariable Integer id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
         especificacionService.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }

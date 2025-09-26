@@ -58,7 +58,6 @@ public class Oferta {
     @Size(max = 30)
     @Column(name = "salario_modalidad", length = 30)
     private String salarioModalidad;
-
     @Size(max = 30)
     @Column(name = "salario_moneda", length = 30)
     private String salarioMoneda;
@@ -71,4 +70,7 @@ public class Oferta {
 
     @Column(name = "salario_mostrar")
     private Integer salarioMostrar;
+
+    @OneToOne(mappedBy = "oferta", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    private Especificacion especificacion;
 }

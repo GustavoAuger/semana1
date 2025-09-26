@@ -7,9 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
-
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -22,24 +20,16 @@ public class OfertaController {
     //GET
     @GetMapping
     public ResponseEntity<List<OfertaDTO>> findAll() {
-        List<OfertaDTO> ofertaDTOS = ofertaService.findAll().stream().map(
-            oferta -> {
-                return modelMapper.map(oferta, OfertaDTO.class);
-            }
-        ).collect(Collectors.toList());
-
+        List<OfertaDTO> ofertaDTOS = ofertaService.findAll().stream()
+            .map(oferta -> modelMapper.map(oferta, OfertaDTO.class))
+            .collect(Collectors.toList());
         return ResponseEntity.ok(ofertaDTOS);
-        
     }
     //GET X ID  
     @GetMapping("/{id}")
     public ResponseEntity<OfertaDTO> findById(@PathVariable Integer id) {
-        Optional<Oferta> ofertaOptional = ofertaService.findById(id);
-
-        return ofertaOptional.map(
-            ofertaDB -> {
-                return ResponseEntity.ok(modelMapper.map(ofertaDB, OfertaDTO.class));
-            }
-        ).orElseGet(() -> ResponseEntity.notFound().build());
+        Oferta oferta = ofertaService.findById(id);
+        OfertaDTO ofertaDTO = modelMapper.map(oferta, OfertaDTO.class);
+        return ResponseEntity.ok(ofertaDTO);
     }
 }

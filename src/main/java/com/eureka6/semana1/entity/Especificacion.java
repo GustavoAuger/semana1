@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "especificaciones", indexes = {
-        @Index(name = "idx_especificacion_oferta_id", columnList = "oferta_id")
+        @Index(name = "idx_especificacion_oferta_id", columnList = "oferta_id", unique = true)
 })
 @Getter
 @Setter
@@ -23,8 +23,9 @@ public class Especificacion {
     private Integer id;
 
     @NotNull
-    @Column(name = "oferta_id", nullable = false)
-    private Integer ofertaId; // Asociación explícita por atributo en común con Oferta.id
+    @OneToOne
+    @JoinColumn(name = "oferta_id", nullable = false, unique = true)
+    private Oferta oferta; // Asociación 1:1 con Oferta
 
     @Column(name = "numero_vacantes")
     private Integer numeroVacantes;
