@@ -1,38 +1,46 @@
 package com.eureka6.semana1.controller;
 
+import com.eureka6.semana1.dto.EspecificacionDTO;
 import com.eureka6.semana1.entity.Especificacion;
 import com.eureka6.semana1.service.EspecificacionService;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/especificaciones")
 @RequiredArgsConstructor
-public class EspecificacionController {
+@RequestMapping("/api/especificaciones")
 
+public class EspecificacionController {
     private final EspecificacionService especificacionService;
+    private final ModelMapper modelMapper;
 
     @GetMapping
-    public List<Especificacion> listar(@RequestParam(value = "ofertaId", required = false) Integer ofertaId) {
-        if (ofertaId != null) {
-            return especificacionService.listarPorOfertaId(ofertaId);
-        }
-        return especificacionService.listarTodas();
+    public List<EspecificacionDTO> findAll(@RequestParam(required = false) Integer ofertaId) {
+        List<Especificacion> entidades = (ofertaId != null)
+                ? especificacionService.listarPorOfertaId(ofertaId)
+                : especificacionService.listarTodas();
+        return entidades.stream()
+                .map(e -> modelMapper.map(e, EspecificacionDTO.class))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public Especificacion obtener(@PathVariable Integer id) {
-        return especificacionService.obtenerPorId(id);
+    public EspecificacionDTO obtener(@PathVariable Integer id) {
+        Especificacion entidad = especificacionService.obtenerPorId(id);
+        return modelMapper.map(entidad, EspecificacionDTO.class);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Especificacion crear(@Valid @RequestBody Especificacion especificacion) {
-        return especificacionService.crear(especificacion);
+    public EspecificacionDTO crear(@Valid @RequestBody EspecificacionDTO dto) {
+        Especificacion entidad = modelMapper.map(dto, Especificacion.class);
+        Especificacion guardado = especificacionService.crear(entidad);
+        return modelMapper.map(guardado, EspecificacionDTO.class);
     }
 
     @DeleteMapping("/{id}")
