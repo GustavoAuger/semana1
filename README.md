@@ -1,54 +1,62 @@
 # Eureka Exercise - Spring Boot 3 + MySQL + Docker
 
-Proyecto de ejemplo para el ejercicio: entidad principal y secundaria relacionadas por un atributo en común, con capas separadas, persistencia en MySQL y despliegue vía Docker Compose.
+Proyecto de ejemplo que implementa una API REST con Spring Boot 3, utilizando MySQL como base de datos y Docker para el despliegue. El sistema maneja entidades relacionadas (Especificación y Oferta) a través de un atributo en común.
 
-- Entidad principal: `Especificacion` (atributo en común: `ofertaId`)
-- Entidad secundaria: `Oferta` (se asocia desde `Especificacion.ofertaId` hacia `Oferta.id`)
+## 🚀 Requisitos Previos
 
-## Requisitos
-- Java 17
-- Maven 3.9+
-- Docker y Docker Compose
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) (Windows/macOS) o [Docker Engine](https://docs.docker.com/engine/install/) (Linux)
+- [Docker Compose](https://docs.docker.com/compose/install/) (generalmente viene con Docker Desktop)
 
-## Cómo ejecutar
+> **Nota importante**: No es necesario instalar Java, Maven ni MySQL en tu sistema local, ya que todo se ejecutará dentro de contenedores Docker.
 
-1. Build de la imagen y levantar stack (app + MySQL):
+## 🛠️ Cómo comenzar
 
-```bash
-docker compose up -d --build
-```
+1. Clona el repositorio:
+   ```bash
+   git clone <url-del-repositorio>
+   cd springboot-1
+   ```
 
-La app levantará en `http://localhost:8080` y MySQL en `localhost:3306`.
+2. Construye las imágenes y levanta los contenedores:
+   ```bash
+   docker compose up -d --build
+   ```
 
-Credenciales MySQL por defecto:
-- user: `eureka`
-- password: `secret`
-- db: `eureka`
+3. La aplicación estará disponible en: http://localhost:8080
+4. La base de datos MySQL estará disponible en: localhost:3306
 
-2. Logs de la app:
+### Credenciales de la base de datos
+- Usuario: `eureka`
+- Contraseña: `secret`
+- Base de datos: `eureka`
+
+### Comandos útiles
+
+📝 Ver logs de la aplicación:
 ```bash
 docker compose logs -f app
 ```
 
-3. Parar y eliminar contenedores:
+🛑 Detener y eliminar contenedores:
 ```bash
 docker compose down -v
 ```
 
-## Endpoints
 
-- Ofertas (entidad secundaria)
-  - GET `http://localhost:8080/api/ofertas`
-  - GET `http://localhost:8080/api/ofertas/{id}`
+## 🌐 Endpoints de la API
 
-- Especificaciones (entidad principal)
-  - GET `http://localhost:8080/api/especificaciones`
-  - GET `http://localhost:8080/api/especificaciones?ofertaId=1`
-  - GET `http://localhost:8080/api/especificaciones/{id}`
-  - POST `http://localhost:8080/api/especificaciones`
-  - DELETE `http://localhost:8080/api/especificaciones/{id}`
+### Ofertas (entidad secundaria)
+- `GET /api/ofertas` - Lista todas las ofertas
+- `GET /api/ofertas/{id}` - Obtiene una oferta por su ID
 
-Body JSON de ejemplo para crear Especificación:
+### Especificaciones (entidad principal)
+- `GET /api/especificaciones` - Lista todas las especificaciones
+- `GET /api/especificaciones?ofertaId=1` - Filtra especificaciones por ID de oferta
+- `GET /api/especificaciones/{id}` - Obtiene una especificación por su ID
+- `POST /api/especificaciones` - Crea una nueva especificación
+- `DELETE /api/especificaciones/{id}` - Elimina una especificación
+
+#### Ejemplo de solicitud POST para crear una Especificación:
 ```json
 {
   "ofertaId": 1,
@@ -65,26 +73,59 @@ Body JSON de ejemplo para crear Especificación:
 }
 ```
 
-## Datos de ejemplo
-Se cargan automáticamente desde `src/main/resources/data.sql`:
-- Ofertas de ejemplo y especificaciones asociadas por `oferta_id`.
+## 🏗️ Estructura del Proyecto
 
-## Estructura de paquetes
-- `com.eureka.eurekaexercise.entity` (entidades JPA)
-- `com.eureka.eurekaexercise.repository` (repositorios Spring Data JPA)
-- `com.eureka.eurekaexercise.service` (servicios)
-- `com.eureka.eurekaexercise.controller` (controladores REST)
+```
+src/main/java/com/eureka6/semana1/
+├── config/           # Configuraciones de la aplicación
+├── controller/       # Controladores REST
+├── dto/              # Objetos de Transferencia de Datos
+├── entity/           # Entidades JPA
+├── repository/       # Repositorios de Spring Data JPA
+├── service/          # Lógica de negocio
+└── Semana1Application.java  # Clase principal
 
-## Compilar sin Docker
+src/main/resources/
+├── application.yml   # Configuración de la aplicación
+└── data.sql          # Datos iniciales
 
-```bash
-mvn clean package -DskipTests
-java -jar target/semana1-0.0.1-SNAPSHOT.jar
+Dockerfile           # Configuración para construir la imagen Docker
+docker-compose.yml   # Configuración de los servicios Docker
 ```
 
-Configurar variables de entorno o `application.yaml` para tu base local.
+## 🛠 Tecnologías Utilizadas
 
-## Notas
+### Backend
+- **Java 17** - Lenguaje de programación
+- **Spring Boot 3** - Framework para aplicaciones Java
+- **Spring Data JPA** - Para la capa de persistencia
+- **Lombok** - Para reducir código boilerplate
+- **ModelMapper** - Para el mapeo entre entidades y DTOs de forma sencilla
 
- - El servicio MySQL en Docker Compose usa un volumen `db_data` para persistir los datos en el host, evitando pérdidas al pausar o recrear contenedores.
+### Base de Datos
+- **MySQL 8** - Sistema de gestión de bases de datos relacional
 
+### Contenedorización
+- **Docker** - Para empaquetar la aplicación y sus dependencias
+- **Docker Compose** - Para orquestar múltiples contenedores
+
+### Herramientas de Desarrollo
+- **Maven** - Gestión de dependencias y construcción del proyecto
+- **Git** - Control de versiones
+
+## 📦 Datos de Ejemplo
+
+El sistema carga automáticamente datos de ejemplo al iniciar desde `src/main/resources/data.sql`, incluyendo ofertas de ejemplo y sus especificaciones asociadas.
+
+## 🔄 Persistencia de Datos
+
+- Los datos de MySQL se persisten en un volumen de Docker llamado `db_data`
+- Esto evita la pérdida de datos al detener o reiniciar los contenedores
+- El volumen se almacena en el host en una ubicación gestionada por Docker
+
+## 📝 Notas Adicionales
+
+- La aplicación está configurada para desarrollo local con Docker
+- Las variables de entorno están configuradas en el archivo `docker-compose.yml`
+- Para entornos de producción, se recomienda revisar las configuraciones de seguridad
+- No se requiere configuración adicional más allá de lo especificado en este documento
