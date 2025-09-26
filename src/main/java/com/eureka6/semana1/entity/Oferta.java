@@ -2,9 +2,17 @@ package com.eureka6.semana1.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "ofertas")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Oferta {
 
     @Id
@@ -12,7 +20,7 @@ public class Oferta {
     private Integer id;
 
     @Column(name = "solicitud_id")
-    private Integer solicitudId; // FK lógica no considerada en este ejercicio
+    private Integer solicitudId; // FK pero no aplica para este caso.
 
     @Size(max = 200)
     @Column(length = 200)
@@ -64,37 +72,4 @@ public class Oferta {
 
     @Column(name = "salario_mostrar")
     private Integer salarioMostrar;
-
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
-    public Integer getSolicitudId() { return solicitudId; }
-    public void setSolicitudId(Integer solicitudId) { this.solicitudId = solicitudId; }
-    public String getTitulo() { return titulo; }
-    public void setTitulo(String titulo) { this.titulo = titulo; }
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-    public String getRequisitosMinimos() { return requisitosMinimos; }
-    public void setRequisitosMinimos(String requisitosMinimos) { this.requisitosMinimos = requisitosMinimos; }
-    public Integer getAnonima() { return anonima; }
-    public void setAnonima(Integer anonima) { this.anonima = anonima; }
-    public String getArea() { return area; }
-    public void setArea(String area) { this.area = area; }
-    public String getIdioma() { return idioma; }
-    public void setIdioma(String idioma) { this.idioma = idioma; }
-    public String getPais() { return pais; }
-    public void setPais(String pais) { this.pais = pais; }
-    public String getLocalizacion() { return localizacion; }
-    public void setLocalizacion(String localizacion) { this.localizacion = localizacion; }
-    public String getSalarioModalidad() { return salarioModalidad; }
-    public void setSalarioModalidad(String salarioModalidad) { this.salarioModalidad = salarioModalidad; }
-    public String getSalarioMoneda() { return salarioMoneda; }
-    public void setSalarioMoneda(String salarioMoneda) { this.salarioMoneda = salarioMoneda; }
-    public Integer getSalarioDesde() { return salarioDesde; }
-    public void setSalarioDesde(Integer salarioDesde) { this.salarioDesde = salarioDesde; }
-    public Integer getSalarioHasta() { return salarioHasta; }
-    public void setSalarioHasta(Integer salarioHasta) { this.salarioHasta = salarioHasta; }
-    public Integer getSalarioMostrar() { return salarioMostrar; }
-    public void setSalarioMostrar(Integer salarioMostrar) { this.salarioMostrar = salarioMostrar; }
 }

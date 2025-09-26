@@ -6,17 +6,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class EspecificacionService {
 
     private final EspecificacionRepository especificacionRepository;
-
-    public EspecificacionService(EspecificacionRepository especificacionRepository) {
-        this.especificacionRepository = especificacionRepository;
-    }
 
     public List<Especificacion> listarTodas() {
         return especificacionRepository.findAll();

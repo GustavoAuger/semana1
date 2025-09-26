@@ -5,17 +5,15 @@ import com.eureka6.semana1.repository.OfertaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OfertaService {
 
     private final OfertaRepository ofertaRepository;
-
-    public OfertaService(OfertaRepository ofertaRepository) {
-        this.ofertaRepository = ofertaRepository;
-    }
 
     public List<Oferta> listarTodas() {
         return ofertaRepository.findAll();

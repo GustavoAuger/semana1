@@ -5,18 +5,16 @@ import com.eureka6.semana1.service.EspecificacionService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/especificaciones")
+@RequiredArgsConstructor
 public class EspecificacionController {
 
     private final EspecificacionService especificacionService;
-
-    public EspecificacionController(EspecificacionService especificacionService) {
-        this.especificacionService = especificacionService;
-    }
 
     @GetMapping
     public List<Especificacion> listar(@RequestParam(value = "ofertaId", required = false) Integer ofertaId) {
